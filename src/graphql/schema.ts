@@ -15,6 +15,7 @@ export const Schema = buildSchema(`#graphql
         getAllPosts: [Post]
         getAllComments: [Post]
         getOnePost(id: Int): Post
+        getOneComment(id: Int): Post
     }
 
     type Mutation {
