@@ -1,0 +1,26 @@
+{
+    "name": "G18cMlykJl55FJDs",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "https://git.codebie.com/coding-challenge/G18cMlykJl55FJDs.git",
+    "author": "ctnkaan <kaan.taskingenc@gmail.com>",
+    "license": "MIT",
+    "type": "module",
+    "scripts": {
+        "start": "node dist/index.js",
+        "build": "tsc",
+        "watch": "tsc -w",
+        "pretify": "prettier --write ./src/**/*.ts"
+    },
+    "devDependencies": {
+        "@types/node": "^18.11.17",
+        "nodemon": "^2.0.20",
+        "prettier": "2.8.1",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.9.4"
+    },
+    "dependencies": {
+        "@apollo/server": "^4.3.0",
+        "graphql": "^16.6.0"
+    }
+}
