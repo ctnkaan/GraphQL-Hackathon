@@ -26,6 +26,7 @@
         "express-graphql": "^0.12.0",
         "graphql": "^16.6.0",
         "graphql-tools": "^8.3.14",
-        "moment": "^2.29.4"
+        "moment": "^2.29.4",
+        "mongoose": "^6.8.1"
     }
 }
