@@ -1,6 +1,7 @@
 import express from 'express'
 import { graphqlHTTP } from 'express-graphql'
 import { buildSchema } from 'graphql'
+import { Iinput, Icomment } from './interfaces'
 
 const app = express()
 
@@ -9,14 +10,12 @@ const sampleData = {
         {
             id: 1,
             content: 'Welcome to learning GraphQL!',
-            upvotes: 0,
-            downvotes: 0,
+            thumbsUp: 0,
             comments: [
                 {
                     id: 1,
                     content: 'This is a comment',
-                    upvotes: 0,
-                    downvotes: 0,
+                    thumbsUp: 0,
                     comments: [],
                 },
             ],
@@ -24,14 +23,12 @@ const sampleData = {
         {
             id: 2,
             content: 'This is a second post',
-            upvotes: 0,
-            downvotes: 0,
+            thumbsUp: 0,
             comments: [
                 {
                     id: 1,
                     content: 'This is a comment',
-                    upvotes: 0,
-                    downvotes: 0,
+                    thumbsUp: 0,
                     comments: [],
                 },
             ],
@@ -40,16 +37,7 @@ const sampleData = {
 }
 
 const Schema = buildSchema(`#graphql
-    type Query {
-        getAllPosts: [Post]
-        getOnePost(id: Int): Post!
-    }
-
-    type Mutation {
-        createPost(input: PostInput): Post
-        createCommentForPost(comment: CommentInput): Comment
-    }
-
+    
     input PostInput {
         content: String!
     }
@@ -58,33 +46,33 @@ const Schema = buildSchema(`#graphql
         content: String!
         postId: Int!
     }
+    
+    type Query {
+        getAllPosts: [Post]
+        getOnePost(id: Int): Post!
+    }
+
+    type Mutation {
+        createPost(input: PostInput): Post
+        createCommentForPost(comment: CommentInput): Comment
+        changeVotePost(id: Int, vote: String): Post
+    }
 
 
     type Post {
         id: Int!
         content: String!
-        upvotes: Int
-        downvotes: Int
+        thumbsUp: Int
         comments: [Comment]
     }
 
     type Comment {
         id: Int
         content: String
-        upvotes: Int
-        downvotes: Int
+        thumbsUp: Int
         comments: [Comment]
     }
 `)
-
-interface Iinput {
-    content: string
-}
-
-interface Icomment {
-    content: string
-    postId: number
-}
 
 const Resolvers = {
     getAllPosts: () => sampleData.posts,
@@ -96,8 +84,7 @@ const Resolvers = {
         const newPost = {
             id: sampleData.posts.length + 1,
             content: input.content,
-            upvotes: 0,
-            downvotes: 0,
+            thumbsUp: 0,
             comments: [],
         }
         sampleData.posts.push(newPost)
@@ -117,15 +104,24 @@ const Resolvers = {
         const newComment = {
             id: post.comments.length + 1,
             content: comment.content,
-            upvotes: 0,
-            downvotes: 0,
+            thumbsUp: 0,
             comments: [],
         }
 
         //add the comment to the post
         post.comments.push(newComment);
         return newComment;
+    },
 
+    changeVotePost: ({ id, vote }: { id: number, vote: string }) => {
+        const post = sampleData.posts.find((post: any) => post.id === id)
+        if (post === undefined) throw new Error('Post not found with id: ' + id)
+
+        if (vote === 'up') post.thumbsUp++
+        else if (vote === 'down') post.thumbsUp--
+        else throw new Error('Vote must be up or down')
+
+        return post
     }
 }
 
@@ -137,4 +133,5 @@ app.use(
         graphiql: true,
     })
 )
+
 app.listen(4000, () => console.log('Now browse to localhost:4000/graphql'))
