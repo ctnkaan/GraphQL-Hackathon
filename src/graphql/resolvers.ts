@@ -7,10 +7,15 @@ import { createPost } from '../resolverFunctions/createPost.js'
 import { createComment } from '../resolverFunctions/createComment.js'
 import { updateReaction } from '../resolverFunctions/updateReaction.js'
 import { getAllComments } from '../resolverFunctions/getAllComments.js'
+import { getOnePost } from '../resolverFunctions/getOnePost.js'
 
 export const Resolvers = {
     getAllPosts: () => {
         return getAllPosts()
+    },
+
+    getOnePost: ({ id }: { id: number }) => {
+        return getOnePost(id)
     },
 
     getAllComments: () => {
