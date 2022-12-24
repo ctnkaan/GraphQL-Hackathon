@@ -1,58 +1,105 @@
-import { ApolloServer } from '@apollo/server'
-import { startStandaloneServer } from '@apollo/server/standalone'
+import express from 'express'
+import { graphqlHTTP } from 'express-graphql'
+import { buildSchema } from 'graphql'
 
-// A schema is a collection of type definitions (hence "typeDefs")
-// that together define the "shape" of queries that are executed against
-// your data.
-const typeDefs = `#graphql
-  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
+const app = express()
 
-  # This "Book" type defines the queryable fields for every book in our data source.
-  type Book {
-    title: String
-    author: String
-  }
+const sampleData = {
+    posts: [
+        {
+            id: 1,
+            content: 'Welcome to learning GraphQL!',
+            upvotes: 0,
+            downvotes: 0,
+            comments: [
+                {
+                    id: 1,
+                    content: 'This is a comment',
+                    upvotes: 0,
+                    downvotes: 0,
+                    comments: [],
+                },
+            ],
+        },
+        {
+            id: 2,
+            content: 'This is a second post',
+            upvotes: 0,
+            downvotes: 0,
+            comments: [
+                {
+                    id: 1,
+                    content: 'This is a comment',
+                    upvotes: 0,
+                    downvotes: 0,
+                    comments: [],
+                },
+            ],
+        },
+    ],
+}
 
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
-  type Query {
-    books: [Book]
-  }
-`
+const Schema = buildSchema(`#graphql
+    type Query {
+        getAllPosts: [Post],
+        getOnePost(id: Int): Post!
+    }
 
-const books = [
-    {
-        title: 'The Awakening',
-        author: 'Kate Chopin',
-    },
-    {
-        title: 'City of Glass',
-        author: 'Paul Auster',
-    },
-]
+    type Mutation {
+        # createPost mutation takes content as an input from the user. the id is posts.length + 1
+        createPost(input: PostInput): Post
+    }
 
-// Resolvers define how to fetch the types defined in your schema.
-// This resolver retrieves books from the "books" array above.
-const resolvers = {
-    Query: {
-        books: () => books,
+    input PostInput {
+        content: String!
+    }
+
+
+
+    type Post {
+        id: Int!
+        content: String!
+        upvotes: Int
+        downvotes: Int
+        comments: [Comment]
+    }
+
+    type Comment {
+        id: Int
+        content: String
+        upvotes: Int
+        downvotes: Int
+        comments: [Comment]
+    }
+`)
+
+interface Iinput {
+    content: string
+}
+
+const Resolvers = {
+    getAllPosts: () => sampleData.posts,
+    getOnePost: ({ id }: { id: number }) =>
+        sampleData.posts.find((post: any) => post.id === id),
+    createPost: ({ input }: { input: Iinput }) => {
+        const newPost = {
+            id: sampleData.posts.length + 1,
+            content: input.content,
+            upvotes: 0,
+            downvotes: 0,
+            comments: [],
+        }
+        sampleData.posts.push(newPost)
+        return newPost
     },
 }
 
-// The ApolloServer constructor requires two parameters: your schema
-// definition and your set of resolvers.
-const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-})
-
-// Passing an ApolloServer instance to the `startStandaloneServer` function:
-//  1. creates an Express app
-//  2. installs your ApolloServer instance as middleware
-//  3. prepares your app to handle incoming requests
-const { url } = await startStandaloneServer(server, {
-    listen: { port: 4000 },
-})
-
-console.log(`🚀  Server ready at: ${url}`)
+app.use(
+    '/graphql',
+    graphqlHTTP({
+        schema: Schema,
+        rootValue: Resolvers,
+        graphiql: true,
+    })
+)
+app.listen(4000, () => console.log('Now browse to localhost:4000/graphql'))
