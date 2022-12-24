@@ -1,18 +1,17 @@
 export interface Ipost {
     id: number
     content: string
-    reactions: Ireactions
+    reactions: {
+        thumbsUp: number
+        thumbsDown: number
+        rocket: number
+        heart: number
+    }
     comments: Ipost[]
     commentCount: number
     createdAt: string
 }
 
-interface Ireactions {
-    thumbsUp: number
-    thumbsDown: number
-    rocket: number
-    heart: number
-}
 
 export interface Icomment {
     content: string

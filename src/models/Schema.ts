@@ -12,17 +12,23 @@ const PostSchema = new Schema({
         required: true,
     },
     reactions: {
+        type: Object,
+        required: true,
         thumbsUp: {
             type: Number,
+            required: true,
         },
         thumbsDown: {
             type: Number,
+            required: true,
         },
         rocket: {
             type: Number,
+            required: true,
         },
         heart: {
             type: Number,
+            required: true,
         },
     },
     comments: {
@@ -36,6 +42,6 @@ const PostSchema = new Schema({
     },
 });
 
-const PostSchema_MongoDB = mongoose.model("Post", PostSchema);
+const PostSchema_MongoDB = mongoose.model("Post", PostSchema, "posts");
 
 export default PostSchema_MongoDB;
