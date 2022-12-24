@@ -1,4 +1,4 @@
-import PostSchema_MongoDB from '../../models/Schema.js'
+import PostSchema_MongoDB from '../models/Schema.js'
 
 export const updateReaction = async (id: number, vote: string) => {
     //find the post with the provided id

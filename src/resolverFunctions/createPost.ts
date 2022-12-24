@@ -1,6 +1,6 @@
-import { Ipost } from '../../interfaces.js'
-import PostSchema_MongoDB from '../../models/Schema.js'
-import { randomIdGenerator } from '../../util/randomIdGenerator.js'
+import { Ipost } from '../interfaces.js'
+import PostSchema_MongoDB from '../models/Schema.js'
+import { randomIdGenerator } from '../util/randomIdGenerator.js'
 import moment from 'moment'
 
 export const createPost = async (post: Ipost) => {
@@ -19,9 +19,11 @@ export const createPost = async (post: Ipost) => {
             rocket: 0,
             heart: 0,
         },
+        parentPost: 0,
         commentCount: 0,
-        comments: [],
+        paaremntPost: null,
         createdAt: moment().format('MMMM Do YYYY, h:mm:ss a'),
+        type: 'post',
     })
 
     await newPost.save()

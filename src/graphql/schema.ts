@@ -13,6 +13,7 @@ export const Schema = buildSchema(`#graphql
     
     type Query {
         getAllPosts: [Post]
+        getAllComments: [Post]
         getOnePost(id: Int): Post
     }
 
@@ -27,9 +28,10 @@ export const Schema = buildSchema(`#graphql
         id: Int
         content: String
         reactions: Reactions
-        comments: [Post]
+        parentPost: Int
         commentCount: Int
         createdAt: String
+        type: String
     }
 
     type Reactions {

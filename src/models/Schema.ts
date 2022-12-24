@@ -31,15 +31,21 @@ const PostSchema = new Schema({
             required: true,
         },
     },
-    comments: {
-        type: Array,
+    parentPost: {
+        type: Number,
+        required: true,
     },
     commentCount: {
         type: Number,
     },
     createdAt: {
         type: String,
+        required: true,
     },
+    type: {
+        type: String,
+        required: true,
+    }
 })
 
 const PostSchema_MongoDB = mongoose.model('Post', PostSchema, 'posts')

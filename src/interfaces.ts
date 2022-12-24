@@ -7,9 +7,10 @@ export interface Ipost {
         rocket: number
         heart: number
     }
-    comments: Ipost[]
+    parentPost: number
     commentCount: number
     createdAt: string
+    type: string
 }
 
 export interface Icomment {
