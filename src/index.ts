@@ -41,19 +41,23 @@ const sampleData = {
 
 const Schema = buildSchema(`#graphql
     type Query {
-        getAllPosts: [Post],
+        getAllPosts: [Post]
         getOnePost(id: Int): Post!
     }
 
     type Mutation {
-        # createPost mutation takes content as an input from the user. the id is posts.length + 1
         createPost(input: PostInput): Post
+        createCommentForPost(comment: CommentInput): Comment
     }
 
     input PostInput {
         content: String!
     }
 
+    input CommentInput {
+        content: String!
+        postId: Int!
+    }
 
 
     type Post {
@@ -77,10 +81,17 @@ interface Iinput {
     content: string
 }
 
+interface Icomment {
+    content: string
+    postId: number
+}
+
 const Resolvers = {
     getAllPosts: () => sampleData.posts,
+
     getOnePost: ({ id }: { id: number }) =>
         sampleData.posts.find((post: any) => post.id === id),
+
     createPost: ({ input }: { input: Iinput }) => {
         const newPost = {
             id: sampleData.posts.length + 1,
@@ -92,6 +103,30 @@ const Resolvers = {
         sampleData.posts.push(newPost)
         return newPost
     },
+
+    createCommentForPost: ({ comment }: { comment: Icomment }) => {
+        //find the post with the comment id
+        const post = sampleData.posts.find(
+            (post: any) => post.id === comment.postId
+        )
+
+        if (post === undefined)
+            throw new Error('Post not found with id: ' + comment.postId)
+
+        //create the comment
+        const newComment = {
+            id: post.comments.length + 1,
+            content: comment.content,
+            upvotes: 0,
+            downvotes: 0,
+            comments: [],
+        }
+
+        //add the comment to the post
+        post.comments.push(newComment);
+        return newComment;
+
+    }
 }
 
 app.use(
