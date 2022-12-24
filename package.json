@@ -11,7 +11,7 @@
         "build": "tsc",
         "watch": "tsc -w",
         "roll": "yarn build && yarn start",
-        "pretify": "prettier --write ./src/**/*.ts"
+        "prettify": "prettier --write ./src/**/*.ts"
     },
     "devDependencies": {
         "@types/node": "^18.11.17",

@@ -7,12 +7,10 @@ import { Resolvers } from './graphql/resolvers.js'
 
 const app = express()
 
-
 //connect to mongodb
 mongoose.connect('mongodb://localhost:27017', () => {
     console.log('Connected to MongoDB')
 })
-
 
 app.use(
     '/graphql',
@@ -22,6 +20,5 @@ app.use(
         graphiql: true,
     })
 )
-
 
 app.listen(4000, () => console.log('Now browse to localhost:4000/graphql'))

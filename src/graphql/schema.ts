@@ -1,6 +1,5 @@
 import { buildSchema } from 'graphql'
 
-
 export const Schema = buildSchema(`#graphql
     
     input PostInput {

@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
 const PostSchema = new Schema({
     id: {
@@ -40,8 +40,8 @@ const PostSchema = new Schema({
     createdAt: {
         type: String,
     },
-});
+})
 
-const PostSchema_MongoDB = mongoose.model("Post", PostSchema, "posts");
+const PostSchema_MongoDB = mongoose.model('Post', PostSchema, 'posts')
 
-export default PostSchema_MongoDB;
+export default PostSchema_MongoDB

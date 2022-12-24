@@ -12,7 +12,6 @@ export interface Ipost {
     createdAt: string
 }
 
-
 export interface Icomment {
     content: string
     postId: number

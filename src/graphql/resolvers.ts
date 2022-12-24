@@ -10,22 +10,19 @@ import { createComment } from './resolverFunctions/createComment.js'
 import { updateReaction } from './resolverFunctions/updateReaction.js'
 
 export const Resolvers = {
-    
     getAllPosts: () => {
-        return getAllPosts();
+        return getAllPosts()
     },
 
     createPost: ({ post }: { post: Ipost }) => {
-        return createPost(post);
+        return createPost(post)
     },
 
     createComment: ({ comment }: { comment: Icomment }) => {
-        return createComment(comment);
+        return createComment(comment)
     },
 
-    updateReaction: ({ id, vote }: { id: number, vote: string }) => {
-        return updateReaction(id, vote);
+    updateReaction: ({ id, vote }: { id: number; vote: string }) => {
+        return updateReaction(id, vote)
     },
-
-    
 }
