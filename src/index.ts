@@ -2,7 +2,7 @@ import express from 'express'
 import { graphqlHTTP } from 'express-graphql'
 import { buildSchema } from 'graphql'
 import moment from 'moment'
-import { Iinput, Icomment } from './interfaces'
+import { Ipost, Icomment } from './interfaces'
 
 const app = express()
 
@@ -53,7 +53,7 @@ const Schema = buildSchema(`#graphql
     }
 
     type Mutation {
-        createPost(input: PostInput): Post
+        createPost(post: PostInput): Post
         createCommentForPost(comment: CommentInput): Comment
         changeVotePost(id: Int, vote: String): Post
     }
@@ -89,10 +89,15 @@ const Resolvers = {
     getOnePost: ({ id }: { id: number }) =>
         db.posts.find((post: any) => post.id === id),
 
-    createPost: ({ input }: { input: Iinput }) => {
+    createPost: ({ post }: { post: Ipost }) => {
+
+        if (post.content.length > 280) {
+            throw new Error('You cannot send a post which has more than 280 characters')
+        }
+
         const newPost = {
             id: db.posts.length + 1,
-            content: input.content,
+            content: post.content,
             reactions: {
                 thumbsUp: 0,
                 thumbsDown: 0,

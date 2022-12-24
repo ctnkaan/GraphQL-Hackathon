@@ -1,4 +1,4 @@
-export interface Iinput {
+export interface Ipost {
     content: string
 }
 
